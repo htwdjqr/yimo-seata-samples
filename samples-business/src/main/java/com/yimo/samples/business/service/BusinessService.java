@@ -27,4 +27,12 @@ import com.yimo.samples.common.response.ObjectResponse;
 public interface BusinessService {
 
     ObjectResponse handleBusiness(BusinessDTO businessDTO);
+
+    /**
+     * TCC模式
+     *
+     * @param businessDTO
+     * @return
+     */
+    ObjectResponse tccHandleBusiness(BusinessDTO businessDTO);
 }

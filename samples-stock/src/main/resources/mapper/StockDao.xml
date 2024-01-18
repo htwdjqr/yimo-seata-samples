@@ -21,4 +21,10 @@
         where commodity_code = #{commodityCode}
     </update>
 
+    <update id="increaseStock">
+        update t_stock
+        set count = count + ${count}
+        where commodity_code = #{commodityCode}
+    </update>
+
 </mapper>

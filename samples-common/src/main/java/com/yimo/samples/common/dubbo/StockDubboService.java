@@ -30,4 +30,9 @@ public interface StockDubboService {
      * 扣减库存
      */
     ObjectResponse decreaseStock(CommodityDTO commodityDTO);
+
+    /**
+     * TCC模式——扣减库存
+     */
+    ObjectResponse tccDecreaseStock(CommodityDTO commodityDTO);
 }

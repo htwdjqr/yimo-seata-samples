@@ -30,4 +30,9 @@ public interface AccountDubboService {
      * 从账户扣钱
      */
     ObjectResponse decreaseAccount(AccountDTO accountDTO);
+
+    /**
+     * TCC模式——从账户扣钱
+     */
+    ObjectResponse tccDecreaseAccount(AccountDTO accountDTO);
 }

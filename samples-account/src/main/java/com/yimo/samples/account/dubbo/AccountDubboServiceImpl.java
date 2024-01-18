@@ -16,8 +16,10 @@
 package com.yimo.samples.account.dubbo;
 
 import com.yimo.samples.account.service.impl.AccountServiceImpl;
+import com.yimo.samples.account.tcc.AccountTccAction;
 import com.yimo.samples.common.dto.AccountDTO;
 import com.yimo.samples.common.dubbo.AccountDubboService;
+import com.yimo.samples.common.enums.RspStatusEnum;
 import com.yimo.samples.common.response.ObjectResponse;
 import io.seata.core.context.RootContext;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -34,10 +36,28 @@ public class AccountDubboServiceImpl implements AccountDubboService {
 
     @Autowired
     private AccountServiceImpl accountService;
+    @Autowired
+    private AccountTccAction accountTccAction;
 
     @Override
     public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
         System.out.println("全局事务id ：" + RootContext.getXID());
         return accountService.decreaseAccount(accountDTO);
+    }
+
+    @Override
+    public ObjectResponse tccDecreaseAccount(AccountDTO accountDTO) {
+        System.out.println("全局事务id ：" + RootContext.getXID());
+        boolean flag = accountTccAction.prepare(null, accountDTO);
+
+        ObjectResponse<Object> response = new ObjectResponse<>();
+        if (flag) {
+            response.setStatus(RspStatusEnum.SUCCESS.getCode());
+            response.setMessage(RspStatusEnum.SUCCESS.getMessage());
+            return response;
+        }
+        response.setStatus(RspStatusEnum.FAIL.getCode());
+        response.setMessage(RspStatusEnum.FAIL.getMessage());
+        return response;
     }
 }

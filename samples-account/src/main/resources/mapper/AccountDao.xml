@@ -20,16 +20,26 @@
         where user_id = #{userId}
     </update>
 
-    <select id="testGlobalLock">
+    <update id="increaseAccount">
+        update t_account
+        set amount = amount + ${amount}
+        where user_id = #{userId}
+    </update>
+
+    <update id="testGlobalLock">
         select *
         from t_account
         where user_id = #{userId} for update
-    </select>
+    </update>
 
     <update id="testWriteIsolation">
         update t_account
         set amount = amount - ${amount}
         where user_id = #{userId}
     </update>
+
+    <select id="getByUserId" resultMap="BaseResultMap">
+        select * from t_account where user_id = #{userId}
+    </select>
 
 </mapper>

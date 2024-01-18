@@ -19,4 +19,14 @@ public interface StockDao extends BaseMapper<StockEntity> {
      * @Return:
      */
     int decreaseStock(@Param("commodityCode") String commodityCode, @Param("count") Integer count);
+
+
+    /**
+     * 增加商品库存
+     *
+     * @param commodityCode
+     * @param count
+     * @return
+     */
+    int increaseStock(@Param("commodityCode") String commodityCode, @Param("count") Integer count);
 }

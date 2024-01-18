@@ -43,7 +43,7 @@ public class BusinessController {
     private BusinessService businessService;
 
     /**
-     * 模拟用户购买商品下单业务逻辑流程
+     * 模拟用户购买商品下单业务逻辑流程，默认AT模式
      *
      * @Param:
      * @Return:
@@ -52,5 +52,17 @@ public class BusinessController {
     ObjectResponse handleBusiness(@RequestBody BusinessDTO businessDTO) {
         LOGGER.info("请求参数：{}", businessDTO.toString());
         return businessService.handleBusiness(businessDTO);
+    }
+
+    /**
+     * 模拟用户购买商品下单业务逻辑流程，TCC模式
+     *
+     * @Param:
+     * @Return:
+     */
+    @PostMapping("/tcc/buy")
+    ObjectResponse tccHandleBusiness(@RequestBody BusinessDTO businessDTO) {
+        LOGGER.info("请求参数：{}", businessDTO.toString());
+        return businessService.tccHandleBusiness(businessDTO);
     }
 }

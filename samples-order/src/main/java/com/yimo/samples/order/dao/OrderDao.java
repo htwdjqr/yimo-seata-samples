@@ -20,4 +20,6 @@ public interface OrderDao extends BaseMapper<OrderEntity> {
     void createOrder(@Param("order") OrderEntity order);
 
 
+    void deleteByOrderNo(@Param("orderNo") String orderNo);
+
 }

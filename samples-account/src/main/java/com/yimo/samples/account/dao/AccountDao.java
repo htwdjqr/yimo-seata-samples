@@ -14,8 +14,12 @@ public interface AccountDao extends BaseMapper<AccountEntity> {
 
     int decreaseAccount(@Param("userId") String userId, @Param("amount") Double amount);
 
-    AccountEntity testGlobalLock(@Param("userId") String userId);
+    int increaseAccount(@Param("userId") String userId, @Param("amount") Double amount);
+
+    int testGlobalLock(@Param("userId") String userId);
 
     int testWriteIsolation(@Param("userId") String userId, @Param("amount") Double amount);
+
+    AccountEntity getByUserId(@Param("userId") String userId);
 
 }

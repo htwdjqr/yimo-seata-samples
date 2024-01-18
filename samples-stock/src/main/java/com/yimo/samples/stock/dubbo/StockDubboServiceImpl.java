@@ -17,8 +17,10 @@ package com.yimo.samples.stock.dubbo;
 
 import com.yimo.samples.common.dto.CommodityDTO;
 import com.yimo.samples.common.dubbo.StockDubboService;
+import com.yimo.samples.common.enums.RspStatusEnum;
 import com.yimo.samples.common.response.ObjectResponse;
 import com.yimo.samples.stock.service.IStockService;
+import com.yimo.samples.stock.tcc.StockTccAction;
 import io.seata.core.context.RootContext;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +36,27 @@ public class StockDubboServiceImpl implements StockDubboService {
 
     @Autowired
     private IStockService stockService;
+    @Autowired
+    private StockTccAction stockTccAction;
 
     @Override
     public ObjectResponse decreaseStock(CommodityDTO commodityDTO) {
         System.out.println("全局事务id ：" + RootContext.getXID());
         return stockService.decreaseStock(commodityDTO);
+    }
+
+    @Override
+    public ObjectResponse tccDecreaseStock(CommodityDTO commodityDTO) {
+        System.out.println("全局事务id ：" + RootContext.getXID());
+        boolean flag = stockTccAction.prepare(null, commodityDTO);
+        ObjectResponse<Object> response = new ObjectResponse<>();
+        if (flag) {
+            response.setStatus(RspStatusEnum.SUCCESS.getCode());
+            response.setMessage(RspStatusEnum.SUCCESS.getMessage());
+            return response;
+        }
+        response.setStatus(RspStatusEnum.FAIL.getCode());
+        response.setMessage(RspStatusEnum.FAIL.getMessage());
+        return response;
     }
 }

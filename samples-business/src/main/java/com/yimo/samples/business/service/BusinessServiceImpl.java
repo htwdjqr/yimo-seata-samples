@@ -28,6 +28,8 @@ import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * @Author: heshouyou
  * @Description Dubbo业务发起方逻辑
@@ -78,6 +80,45 @@ public class BusinessServiceImpl implements BusinessService {
         if (!flag) {
             throw new RuntimeException("测试抛异常后，分布式事务回滚！");
         }
+        if (stockResponse.getStatus() != 200 || response.getStatus() != 200) {
+            throw new DefaultException(RspStatusEnum.FAIL);
+        }
+
+        objectResponse.setStatus(RspStatusEnum.SUCCESS.getCode());
+        objectResponse.setMessage(RspStatusEnum.SUCCESS.getMessage());
+        objectResponse.setData(response.getData());
+        return objectResponse;
+    }
+
+    @Override
+    @GlobalTransactional
+    public ObjectResponse tccHandleBusiness(BusinessDTO businessDTO) {
+        System.out.println("TCC——开始全局事务，XID = " + RootContext.getXID());
+        ObjectResponse<Object> objectResponse = new ObjectResponse<>();
+        //1、扣减库存
+        CommodityDTO commodityDTO = new CommodityDTO();
+        commodityDTO.setCommodityCode(businessDTO.getCommodityCode());
+        commodityDTO.setCount(businessDTO.getCount());
+        ObjectResponse stockResponse = stockDubboService.tccDecreaseStock(commodityDTO);
+        //2、创建订单
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setUserId(businessDTO.getUserId());
+        orderDTO.setCommodityCode(businessDTO.getCommodityCode());
+        orderDTO.setOrderCount(businessDTO.getCount());
+        orderDTO.setOrderAmount(businessDTO.getAmount());
+        orderDTO.setOrderNo(UUID.randomUUID().toString().replace("-", ""));
+        ObjectResponse<OrderDTO> response = orderDubboService.tccCreateOrder(orderDTO);
+
+/*        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }*/
+
+        //打开注释测试事务发生异常后，全局回滚功能
+/*        if (!flag) {
+            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
+        }*/
         if (stockResponse.getStatus() != 200 || response.getStatus() != 200) {
             throw new DefaultException(RspStatusEnum.FAIL);
         }

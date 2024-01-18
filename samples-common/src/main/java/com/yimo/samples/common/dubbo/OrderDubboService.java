@@ -30,4 +30,12 @@ public interface OrderDubboService {
      * 创建订单
      */
     ObjectResponse<OrderDTO> createOrder(OrderDTO orderDTO);
+
+    /**
+     * 创建订单——TCC模式
+     *
+     * @param orderDTO
+     * @return
+     */
+    ObjectResponse<OrderDTO> tccCreateOrder(OrderDTO orderDTO);
 }

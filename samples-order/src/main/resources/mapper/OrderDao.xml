@@ -23,4 +23,8 @@
         insert into t_order
         values (null, #{order.orderNo}, #{order.userId}, #{order.commodityCode}, ${order.count}, ${order.amount})
     </insert>
+
+    <delete id="deleteByOrderNo">
+        delete from t_order where order_no = #{orderNo}
+    </delete>
 </mapper>
