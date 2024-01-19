@@ -21,7 +21,7 @@ public interface OrderTccAction {
      * @param orderDTO      OrderDTO
      * @return the boolean
      */
-    @TwoPhaseBusinessAction(name = "OrderTccActionOne", commitMethod = "commit", rollbackMethod = "rollback")
+    @TwoPhaseBusinessAction(name = "OrderTccActionOne", commitMethod = "commit", rollbackMethod = "rollback", useTCCFence = true)
     boolean prepare(BusinessActionContext actionContext, @BusinessActionContextParameter(paramName = "orderDTO") OrderDTO orderDTO);
 
     /**

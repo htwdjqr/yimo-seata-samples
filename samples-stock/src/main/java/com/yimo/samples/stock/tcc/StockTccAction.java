@@ -21,7 +21,7 @@ public interface StockTccAction {
      * @param commodityDTO  commodityDTO
      * @return the boolean
      */
-    @TwoPhaseBusinessAction(name = "StockTccActionOne", commitMethod = "commit", rollbackMethod = "rollback")
+    @TwoPhaseBusinessAction(name = "StockTccActionOne", commitMethod = "commit", rollbackMethod = "rollback", useTCCFence = true)
     boolean prepare(BusinessActionContext actionContext, @BusinessActionContextParameter(paramName = "commodityDTO") CommodityDTO commodityDTO);
 
     /**

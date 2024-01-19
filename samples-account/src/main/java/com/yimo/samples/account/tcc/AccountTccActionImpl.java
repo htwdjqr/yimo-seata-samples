@@ -31,7 +31,7 @@ public class AccountTccActionImpl implements AccountTccAction {
         AccountEntity entity = accountDao.getByUserId(accountDTO.getUserId());
         log.info("prepare,account = {}", JSON.toJSONString(entity));
         // 这里抛出异常，本地事务回滚一次，全局事务又执行一次rollback的逻辑，相当于回滚了两次，导致数据错误
-        // int i = 1 / 0;
+        //int i = 1 / 0;
         return account > 0;
     }
 

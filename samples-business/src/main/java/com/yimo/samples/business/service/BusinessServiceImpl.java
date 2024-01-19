@@ -77,9 +77,9 @@ public class BusinessServiceImpl implements BusinessService {
             throw new RuntimeException(e);
         }*/
         //打开注释测试事务发生异常后，全局回滚功能
-        if (!flag) {
+/*        if (!flag) {
             throw new RuntimeException("测试抛异常后，分布式事务回滚！");
-        }
+        }*/
         if (stockResponse.getStatus() != 200 || response.getStatus() != 200) {
             throw new DefaultException(RspStatusEnum.FAIL);
         }
@@ -108,12 +108,6 @@ public class BusinessServiceImpl implements BusinessService {
         orderDTO.setOrderAmount(businessDTO.getAmount());
         orderDTO.setOrderNo(UUID.randomUUID().toString().replace("-", ""));
         ObjectResponse<OrderDTO> response = orderDubboService.tccCreateOrder(orderDTO);
-
-/*        try {
-            Thread.sleep(30000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }*/
 
         //打开注释测试事务发生异常后，全局回滚功能
 /*        if (!flag) {
