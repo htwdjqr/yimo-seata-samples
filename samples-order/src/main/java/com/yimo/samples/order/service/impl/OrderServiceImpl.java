@@ -9,6 +9,7 @@ import com.yimo.samples.common.response.ObjectResponse;
 import com.yimo.samples.order.dao.OrderDao;
 import com.yimo.samples.order.entity.OrderEntity;
 import com.yimo.samples.order.service.IOrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.UUID;
  * @author coder
  * @date 2024-01-12
  */
+@Slf4j
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> implements IOrderService {
     @DubboReference(version = "1.0.0", check = false)

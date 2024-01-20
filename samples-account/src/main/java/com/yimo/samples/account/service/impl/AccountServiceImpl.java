@@ -8,6 +8,7 @@ import com.yimo.samples.common.dto.AccountDTO;
 import com.yimo.samples.common.enums.RspStatusEnum;
 import com.yimo.samples.common.response.ObjectResponse;
 import io.seata.spring.annotation.GlobalLock;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,16 +38,22 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, AccountEntity> i
 
     @Override
     @GlobalLock
-    @Transactional(rollbackFor = {Throwable.class})
-    public void testGlobalLock() {
-        baseMapper.testGlobalLock("1");
+    @Transactional(rollbackFor = Throwable.class)
+    public ObjectResponse testReadIsolation() {
+        AccountEntity account = baseMapper.getByUserId("1");
         System.out.println("Hi, i got lock, i will do some thing with holding this lock.");
+        System.out.println("account amount = " + account.getAmount());
+        ObjectResponse response = new ObjectResponse();
+        response.setStatus(RspStatusEnum.SUCCESS.getCode());
+        response.setMessage(RspStatusEnum.SUCCESS.getMessage());
+        response.setData(account);
+        return response;
     }
 
     @Override
-    //@GlobalTransactional
+    @GlobalTransactional
     public void testWriteIsolation() {
-        baseMapper.testWriteIsolation("1", Double.valueOf("100"));
+        baseMapper.decreaseAccount("1", Double.valueOf("100"));
         System.out.println("Hi, i got lock, i will do some thing with holding this lock.");
     }
 }

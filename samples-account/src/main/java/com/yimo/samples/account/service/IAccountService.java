@@ -19,7 +19,7 @@ public interface IAccountService extends IService<AccountEntity> {
     ObjectResponse decreaseAccount(AccountDTO accountDTO);
 
 
-    void testGlobalLock();
+    ObjectResponse testReadIsolation();
 
     void testWriteIsolation();
 

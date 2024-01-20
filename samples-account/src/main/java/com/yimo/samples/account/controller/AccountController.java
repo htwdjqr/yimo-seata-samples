@@ -17,6 +17,7 @@ package com.yimo.samples.account.controller;
 
 import com.yimo.samples.account.service.IAccountService;
 import com.yimo.samples.common.dto.AccountDTO;
+import com.yimo.samples.common.enums.RspStatusEnum;
 import com.yimo.samples.common.response.ObjectResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -51,19 +52,21 @@ public class AccountController {
     /**
      * 测试读隔离
      */
-    @GetMapping("/test_global_lock")
-    void testGlobalLock() {
-        LOGGER.info("testGlobalLock");
-        accountService.testGlobalLock();
+    @GetMapping("/test_read_isolation")
+    ObjectResponse testReadIsolation() {
+        return accountService.testReadIsolation();
     }
 
     /**
      * 测试写隔离
      */
     @GetMapping("/test_write_isolation")
-    void testWriteIsolation() {
-        LOGGER.info("test_write_isolation");
+    ObjectResponse testWriteIsolation() {
         accountService.testWriteIsolation();
+        ObjectResponse response = new ObjectResponse();
+        response.setStatus(RspStatusEnum.SUCCESS.getCode());
+        response.setMessage(RspStatusEnum.SUCCESS.getMessage());
+        return response;
     }
 }
 

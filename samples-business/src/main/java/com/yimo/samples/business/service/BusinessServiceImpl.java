@@ -71,15 +71,15 @@ public class BusinessServiceImpl implements BusinessService {
         ObjectResponse<OrderDTO> response = orderDubboService.createOrder(orderDTO);
 
 
-/*        try {
+        try {
             Thread.sleep(30000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }*/
+        }
         //打开注释测试事务发生异常后，全局回滚功能
-/*        if (!flag) {
+        if (!flag) {
             throw new RuntimeException("测试抛异常后，分布式事务回滚！");
-        }*/
+        }
         if (stockResponse.getStatus() != 200 || response.getStatus() != 200) {
             throw new DefaultException(RspStatusEnum.FAIL);
         }
@@ -110,9 +110,9 @@ public class BusinessServiceImpl implements BusinessService {
         ObjectResponse<OrderDTO> response = orderDubboService.tccCreateOrder(orderDTO);
 
         //打开注释测试事务发生异常后，全局回滚功能
-/*        if (!flag) {
+        if (!flag) {
             throw new RuntimeException("测试抛异常后，分布式事务回滚！");
-        }*/
+        }
         if (stockResponse.getStatus() != 200 || response.getStatus() != 200) {
             throw new DefaultException(RspStatusEnum.FAIL);
         }

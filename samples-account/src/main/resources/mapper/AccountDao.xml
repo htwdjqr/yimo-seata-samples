@@ -39,7 +39,7 @@
     </update>
 
     <select id="getByUserId" resultMap="BaseResultMap">
-        select * from t_account where user_id = #{userId}
+        select * from t_account where user_id = #{userId} for update
     </select>
 
 </mapper>
