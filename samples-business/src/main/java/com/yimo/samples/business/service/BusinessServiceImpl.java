@@ -20,6 +20,7 @@ import com.yimo.samples.common.dto.CommodityDTO;
 import com.yimo.samples.common.dto.OrderDTO;
 import com.yimo.samples.common.dubbo.OrderDubboService;
 import com.yimo.samples.common.dubbo.StockDubboService;
+import com.yimo.samples.common.dubbo.StockTccDubboService;
 import com.yimo.samples.common.enums.RspStatusEnum;
 import com.yimo.samples.common.exception.DefaultException;
 import com.yimo.samples.common.response.ObjectResponse;
@@ -43,6 +44,9 @@ public class BusinessServiceImpl implements BusinessService {
 
     @DubboReference(version = "1.0.0", check = false)
     private OrderDubboService orderDubboService;
+
+    @DubboReference(version = "1.0.0", check = false)
+    private StockTccDubboService stockTccDubboService;
 
     private boolean flag;
 
@@ -99,7 +103,12 @@ public class BusinessServiceImpl implements BusinessService {
         CommodityDTO commodityDTO = new CommodityDTO();
         commodityDTO.setCommodityCode(businessDTO.getCommodityCode());
         commodityDTO.setCount(businessDTO.getCount());
+        // 以本地模式使用TCC
         ObjectResponse stockResponse = stockDubboService.tccDecreaseStock(commodityDTO);
+
+        // 以RPC的形式使用TCC接口，但在配置 useTCCFence = true之后会报异常
+        //stockTccDubboService.prepare(null, commodityDTO);
+
         //2、创建订单
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setUserId(businessDTO.getUserId());
@@ -110,13 +119,9 @@ public class BusinessServiceImpl implements BusinessService {
         ObjectResponse<OrderDTO> response = orderDubboService.tccCreateOrder(orderDTO);
 
         //打开注释测试事务发生异常后，全局回滚功能
-        if (!flag) {
+/*        if (!flag) {
             throw new RuntimeException("测试抛异常后，分布式事务回滚！");
-        }
-        if (stockResponse.getStatus() != 200 || response.getStatus() != 200) {
-            throw new DefaultException(RspStatusEnum.FAIL);
-        }
-
+        }*/
         objectResponse.setStatus(RspStatusEnum.SUCCESS.getCode());
         objectResponse.setMessage(RspStatusEnum.SUCCESS.getMessage());
         objectResponse.setData(response.getData());
