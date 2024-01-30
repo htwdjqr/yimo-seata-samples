@@ -32,7 +32,7 @@ Seata 支持同一项目中多种模式混合使用的，默认是AT模式，本
 
 ![](https://seata.io/zh-cn/assets/images/architecture-6bdb120b83710010167e8b75448505ec.png)
 
-本来想直接使用官方 [示例工程 ](示例工程 [incubator-seata-samples](https://github.com/apache/incubator-seata-samples))中的 **springboot-dubbo-seata**，奈何应用启动报错，所以决定重新搭建应用，对于业务代码则copy示例工程的。根据 [新人文档](https://seata.io/zh-cn/docs/ops/deploy-guide-beginner) 中业务系统集成Client章节的内容可知，添加Seata依赖有三种方式：
+本来想直接使用官方示例工程 [incubator-seata-samples](https://github.com/apache/incubator-seata-samples) 中的 **springboot-dubbo-seata**，奈何应用启动报错，所以决定重新搭建应用，对于业务代码则copy示例工程的。根据 [新人文档](https://seata.io/zh-cn/docs/ops/deploy-guide-beginner) 中业务系统集成Client章节的内容可知，添加Seata依赖有三种方式：
 
 - 依赖seata-all
 - 依赖seata-spring-boot-starter，支持yml、properties配置(.conf可删除)，内部已依赖seata-all
@@ -86,7 +86,11 @@ git clone https://github.com/htwdjqr/yimo-seata-samples.git
 其中 **undo_log** 是AT模式下的回滚日志表，**tcc_fence_log** 是TCC模式下用于解决幂等、悬挂和空回滚问题，具体可以参考官网上的文章：[阿里 Seata 新版本终于解决了 TCC 模式的幂等、悬挂和空回滚问题。](https://seata.io/zh-cn/blog/seata-tcc-fence)
 
 ### 3. 启动 Nacos
-Nacos使用的版本是1.4.2，官网地址：[https://nacos.io/zh-cn/docs/quick-start.html](https://nacos.io/zh-cn/docs/quick-start.html)，下载地址：[https://github.com/alibaba/nacos/releases/tag/1.4.2](https://github.com/alibaba/nacos/releases/tag/1.4.2)，下载后启动，Nacos控制台地址：http://127.0.0.1:8848/nacos/index.html。
+Nacos使用的版本是1.4.2
+
+- 官网地址：[https://nacos.io/zh-cn/docs/quick-start.html](https://nacos.io/zh-cn/docs/quick-start.html)
+- 下载地址：[https://github.com/alibaba/nacos/releases/tag/1.4.2](https://github.com/alibaba/nacos/releases/tag/1.4.2)
+- 下载后启动，Nacos控制台地址：http://127.0.0.1:8848/nacos/index.html
 
 ### 4. 启动 Seata Server
 
@@ -132,7 +136,7 @@ public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
 }
 ```
 
-## 四、AT模式事务隔离
+## 四、AT 模式事务隔离
 
 AT模式的使用很简单，只需要在事务发起方添加 **@GlobalTransactional** 注解，其他的事情Seata自动完成，所以使用上没啥好说的，我们来关注下AT模式下的事务隔离，**yimo-seata-samples** 中也有对应的测试代码。
 
@@ -285,7 +289,7 @@ tx1 二阶段全局提交，释放 **全局锁** 。tx2 拿到 **全局锁** 提
 - [详解 Seata AT 模式事务隔离级别与全局锁设计](https://seata.io/zh-cn/blog/seata-at-lock)
 - [Seata事务隔离](https://seata.io/zh-cn/docs/user/appendix/isolation)
 
-## 五、TCC模式
+## 五、TCC 模式
 
 TCC接口定义实例如下：
 
